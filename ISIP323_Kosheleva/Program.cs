@@ -136,11 +136,11 @@ class Programm
     {
         try
         {
-            products.Add(new Product("Смартфон Samsung", 25000, 15, ProductCategory.Electronics));
+            products.Add(new Product("Смартфон Poko", 25000, 15, ProductCategory.Electronics));
             products.Add(new Product("Футболка хлопковая", 1500, 50, ProductCategory.Clothing));
             products.Add(new Product("Яблоки", 120, 100, ProductCategory.Food));
-            products.Add(new Product("Война и мир", 800, 20, ProductCategory.Books));
-            products.Add(new Product("Футбольный мяч", 3000, 30, ProductCategory.Sports));
+            products.Add(new Product("Война и Poko", 800, 20, ProductCategory.Books));
+            products.Add(new Product("Баскетбольный мяч", 3000, 30, ProductCategory.Sports));
             Console.WriteLine("Добавлено 5 тестовых товаров");
         }
         catch (Exception ex)
@@ -219,7 +219,7 @@ class Programm
             return;
         }
 
-        Console.Write("Введите количество для поставки: ");
+        Console.Write("Введите кол-во для поставки: ");
         if (!int.TryParse(Console.ReadLine(), out int amount)) return;
 
         product.UpdateQuantity(amount);
@@ -237,10 +237,10 @@ class Programm
             Console.WriteLine("Товар не найден.");
             return;
         }
-        Console.Write("Введите количество для продажи: ");
+        Console.Write("Введите кол-во для продажи: ");
         if (!int.TryParse(Console.ReadLine(), out int amount) || amount <= 0)
         {
-            Console.WriteLine("Ошибка: количество должно быть положительным числом");
+            Console.WriteLine("Ошибка: кол-во должно быть положительным числом");
             return;
         }
         try
