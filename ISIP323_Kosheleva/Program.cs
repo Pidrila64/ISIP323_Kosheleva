@@ -319,4 +319,74 @@ class Programm
         {
             Console.WriteLine("В магазине нет товаров.");
         }
+    }//ну тут просто обращаемся к вышенаписанному
+    static void HistorySellProduct()
+    {
+        Console.WriteLine("\n--- История продаж ---");
+
+        if (!salesHistory.Any())
+        {
+            Console.WriteLine("Продаж пока не было.");
+            return;
+        }
+
+        foreach (var sale in salesHistory)
+        {
+            Console.WriteLine(sale.GetInfo());
+        }
+        Console.WriteLine("\nХотите отменить последнюю продажу? (д/н): ");
+        string choice = Console.ReadLine();
+        if (choice?.ToLower() == "д")
+        {
+            if (!undoSale.Any())
+            {
+                Console.WriteLine("Нет продаж для отмены.");
+                return;
+            }
+
+            var lastSale = undoSale.Pop();
+            var product = products.FirstOrDefault(p => p.Id == lastSale.ProductId);
+            if (product != null)
+            {
+                product.UpdateQuantity(lastSale.Quantity);  //возвращаем товар 
+                salesHistory = new Stack<SaleRecord>(salesHistory.Where(s => s != lastSale).Reverse());
+                Console.WriteLine("Последняя продажа отменена!");
+            }
+        }
     }
+    //ну тут именно очко перебираем по товарам и выводим 
+    static void ReportProduct()
+    {
+        Console.WriteLine("\n--- Отчёт о продажах ---");
+
+        if (!salesHistory.Any())
+        {
+            Console.WriteLine("Продаж пока не было.");
+            return;
+        }
+
+        //общие показатели
+        int totalItems = salesHistory.Sum(s => s.Quantity);
+        decimal totalRevenue = salesHistory.Sum(s => s.TotalPrice);
+
+        Console.WriteLine($"Всего продано товаров: {totalItems}");
+        Console.WriteLine($"Общая выручка: {totalRevenue:C}");
+
+        //продажи по каждому товару
+        var grouped = salesHistory
+            .GroupBy(s => s.ProductName)
+            .Select(g => new
+            {
+                Name = g.Key,
+                Count = g.Sum(s => s.Quantity),
+                Sum = g.Sum(s => s.TotalPrice)
+            });
+
+        Console.WriteLine("\nПродажи по товарам:");
+        foreach (var item in grouped)
+        {
+            Console.WriteLine($"{item.Name}: {item.Count} шт. на сумму {item.Sum:C}");
+        }
+    }
+
+}
