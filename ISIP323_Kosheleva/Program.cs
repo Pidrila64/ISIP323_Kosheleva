@@ -149,3 +149,80 @@ class Programm
             Console.WriteLine($"Ошибка при добавлении тестовых данных: {ex.Message}");
         }
     }
+    static void AddTovar()
+    {
+        Console.WriteLine("\n--- Добавление товара ---");
+        Console.Write("Название товара: ");
+        string name = Console.ReadLine();
+
+        Console.Write("Цена товара: ");
+        if (!decimal.TryParse(Console.ReadLine(), out decimal price))
+        {
+            Console.WriteLine("Ошибка: цена должна быть числом");
+            return;
+        }
+
+        Console.Write("Количество: ");
+        if (!int.TryParse(Console.ReadLine(), out int quantity))
+        {
+            Console.WriteLine("Ошибка: количество должно быть числом");
+            return;
+        }
+
+        Console.WriteLine("Категории:");
+        foreach (var cat in Enum.GetValues(typeof(ProductCategory)))
+        {
+            Console.WriteLine($"{(int)cat} - {cat}");
+        }
+        Console.Write("Выберите категорию: ");
+        if (!int.TryParse(Console.ReadLine(), out int catNum) || !Enum.IsDefined(typeof(ProductCategory), catNum))
+        {
+            Console.WriteLine("Ошибка: неверная категория");
+            return;
+        }
+
+        products.Add(new Product(name, price, quantity, (ProductCategory)catNum));
+        Console.WriteLine("Товар успешно добавлен!");
+    }
+
+
+    static void RemoveTovar()
+    {
+        Console.Write("\nВведите код товара для удаления: ");
+        if (!int.TryParse(Console.ReadLine(), out int id))
+        {
+            Console.WriteLine("Ошибка: код должен быть числом");
+            return;
+        }
+
+        var product = products.FirstOrDefault(p => p.Id == id);
+        if (product != null)
+        {
+            products.Remove(product);
+            Console.WriteLine("Товар удален.");
+        }
+        else
+        {
+            Console.WriteLine("Товар не найден.");
+        }
+
+    }
+
+    static void PostavkaTovara()
+    {
+        Console.Write("\nВведите код товара для поставки: ");
+        if (!int.TryParse(Console.ReadLine(), out int id)) return;
+
+        var product = products.FirstOrDefault(p => p.Id == id);
+        if (product == null)
+        {
+            Console.WriteLine("Товар не найден.");
+            return;
+        }
+
+        Console.Write("Введите количество для поставки: ");
+        if (!int.TryParse(Console.ReadLine(), out int amount)) return;
+
+        product.UpdateQuantity(amount);
+        Console.WriteLine("Поставка выполнена.");
+    }
