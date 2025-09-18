@@ -46,24 +46,6 @@ public class Product
     }
 
 } 
-public class SaleRecord
-{
-    public int ProductId { get; }
-    public string ProductName { get; set; }
-    public int Quantity { get; set; }
-    public decimal TotalPrice { get; set; }
-    public SaleRecord(int productId, string productName, int quantity, decimal totalPrice)
-    {
-        ProductId = productId;
-        ProductName = productName;
-        Quantity = quantity;
-        TotalPrice = totalPrice;
-    }
-    public string GetInfo()
-    {
-        return $"{ProductName} (код {ProductId}) - {Quantity} шт. на сумму {TotalPrice:C}";
-    }
-}
 class Programm
 {
     private static List<Product> products = new List<Product>();
@@ -237,7 +219,6 @@ class Programm
         {
             product.UpdateQuantity(-amount);
             decimal total = amount * product.Price;
-            var record = new SaleRecord(product.Id, product.Name, amount, total);
             Console.WriteLine($"Продажа успешна. Остаток товара: {product.Quantity}");
         }
         catch (Exception ex)
@@ -262,7 +243,7 @@ class Programm
 
         var found = products.Where(p => p.Name.ToLower().Contains(name)).ToList();
         if (found.Any())
-            found.ForEach(p => Console.WriteLine(p));
+            found.ForEach(p => Console.WriteLine(p.Print()));
         else
             Console.WriteLine("Товары не найдены.");
     }
@@ -284,7 +265,7 @@ class Programm
 
         var found = products.Where(p => p.Category == (ProductCategory)catNum).ToList();
         if (found.Any())
-            found.ForEach(p => Console.WriteLine(p));
+            found.ForEach(p => Console.WriteLine(p.Print()));
         else
             Console.WriteLine("Товары не найдены.");
     }
