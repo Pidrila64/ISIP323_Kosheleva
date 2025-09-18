@@ -45,8 +45,7 @@ public class Product
                $"Категория: {Category}";
     }
 
-}
-//класс хранения информации специально для вовы это писал я 
+} 
 public class SaleRecord
 {
     public int ProductId { get; }
@@ -68,8 +67,8 @@ public class SaleRecord
 class Programm
 {
     private static List<Product> products = new List<Product>();
-    private static Stack<SaleRecord> salesHistory = new Stack<SaleRecord>(); // тут храним историю
-    private static Stack<SaleRecord> undoSale = new Stack<SaleRecord>(); // тут для отмены 
+    private static Stack<SaleRecord> salesHistory = new Stack<SaleRecord>();
+    private static Stack<SaleRecord> undoSale = new Stack<SaleRecord>(); 
     static void Main(string[] args)
     {
         AddTestData();
@@ -247,7 +246,6 @@ class Programm
         try
         {
             product.UpdateQuantity(-amount);
-            //Тут короче записываем в стек при продаже это для истории
             decimal total = amount * product.Price;
             var record = new SaleRecord(product.Id, product.Name, amount, total);
             salesHistory.Push(record);
@@ -319,7 +317,7 @@ class Programm
         {
             Console.WriteLine("В магазине нет товаров.");
         }
-    }//ну тут просто обращаемся к вышенаписанному
+    }
     static void HistorySellProduct()
     {
         Console.WriteLine("\n--- История продаж ---");
@@ -348,13 +346,13 @@ class Programm
             var product = products.FirstOrDefault(p => p.Id == lastSale.ProductId);
             if (product != null)
             {
-                product.UpdateQuantity(lastSale.Quantity);  //возвращаем товар 
+                product.UpdateQuantity(lastSale.Quantity);
                 salesHistory = new Stack<SaleRecord>(salesHistory.Where(s => s != lastSale).Reverse());
                 Console.WriteLine("Последняя продажа отменена!");
             }
         }
     }
-    //ну тут именно очко перебираем по товарам и выводим 
+
     static void ReportProduct()
     {
         Console.WriteLine("\n--- Отчёт о продажах ---");
@@ -365,14 +363,14 @@ class Programm
             return;
         }
 
-        //общие показатели
+        
         int totalItems = salesHistory.Sum(s => s.Quantity);
         decimal totalRevenue = salesHistory.Sum(s => s.TotalPrice);
 
         Console.WriteLine($"Всего продано товаров: {totalItems}");
         Console.WriteLine($"Общая выручка: {totalRevenue:C}");
 
-        //продажи по каждому товару
+        
         var grouped = salesHistory
             .GroupBy(s => s.ProductName)
             .Select(g => new
