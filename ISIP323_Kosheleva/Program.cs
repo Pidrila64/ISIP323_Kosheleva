@@ -226,3 +226,97 @@ class Programm
         product.UpdateQuantity(amount);
         Console.WriteLine("Поставка выполнена.");
     }
+    static void SellTovar()
+    {
+        Console.Write("\nВведите код товара для продажи: ");
+        if (!int.TryParse(Console.ReadLine(), out int id)) return;
+
+        var product = products.FirstOrDefault(p => p.Id == id);
+
+        if (product == null)
+        {
+            Console.WriteLine("Товар не найден.");
+            return;
+        }
+        Console.Write("Введите количество для продажи: ");
+        if (!int.TryParse(Console.ReadLine(), out int amount) || amount <= 0)
+        {
+            Console.WriteLine("Ошибка: количество должно быть положительным числом");
+            return;
+        }
+        try
+        {
+            product.UpdateQuantity(-amount);
+            //Тут короче записываем в стек при продаже это для истории
+            decimal total = amount * product.Price;
+            var record = new SaleRecord(product.Id, product.Name, amount, total);
+            salesHistory.Push(record);
+            undoSale.Push(record);
+            Console.WriteLine($"Продажа успешна. Остаток товара: {product.Quantity}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка: {ex.Message}");
+        }
+    }
+
+    static void SearchTovarByCode()
+    {
+        Console.Write("\nВведите код товара: ");
+        if (!int.TryParse(Console.ReadLine(), out int id)) return;
+
+        var product = products.FirstOrDefault(p => p.Id == id);
+        Console.WriteLine(product != null ? product.Print() : "Товар не найден.");
+    }
+
+    static void SearchTovarByName()
+    {
+        Console.Write("\nВведите название товара: ");
+        string name = Console.ReadLine()?.ToLower();
+
+        var found = products.Where(p => p.Name.ToLower().Contains(name)).ToList();
+        if (found.Any())
+            found.ForEach(p => Console.WriteLine(p));
+        else
+            Console.WriteLine("Товары не найдены.");
+    }
+
+    static void SearchTovarByCategory()
+    {
+        Console.WriteLine("\nКатегории:");
+        foreach (var cat in Enum.GetValues(typeof(ProductCategory)))
+        {
+            Console.WriteLine($"{(int)cat} - {cat}");
+        }
+
+        Console.Write("Введите номер категории: ");
+        if (!int.TryParse(Console.ReadLine(), out int catNum) || !Enum.IsDefined(typeof(ProductCategory), catNum))
+        {
+            Console.WriteLine("Ошибка: неверная категория");
+            return;
+        }
+
+        var found = products.Where(p => p.Category == (ProductCategory)catNum).ToList();
+        if (found.Any())
+            found.ForEach(p => Console.WriteLine(p));
+        else
+            Console.WriteLine("Товары не найдены.");
+    }
+
+    static void ShowAllProducts()
+    {
+        Console.WriteLine("\n--- Все товары в магазине ---");
+
+        if (products.Any())
+        {
+            Console.WriteLine($"Всего товаров: {products.Count}");
+            foreach (var product in products.OrderBy(p => p.Id))
+            {
+                Console.WriteLine(product.Print());
+            }
+        }
+        else
+        {
+            Console.WriteLine("В магазине нет товаров.");
+        }
+    }
