@@ -67,8 +67,6 @@ public class SaleRecord
 class Programm
 {
     private static List<Product> products = new List<Product>();
-    private static Stack<SaleRecord> salesHistory = new Stack<SaleRecord>();
-    private static Stack<SaleRecord> undoSale = new Stack<SaleRecord>(); 
     static void Main(string[] args)
     {
         AddTestData();
@@ -85,9 +83,7 @@ class Programm
             Console.WriteLine("6. Поиск товаров по названию");
             Console.WriteLine("7. Поиск товаров по категории");
             Console.WriteLine("8. Вывод всех товаров");
-            Console.WriteLine("9. История продаж с возможностью отмены последней продажи.");
-            Console.WriteLine("10. Отчёт о продажах.");
-            Console.WriteLine("11. Выход");
+            Console.WriteLine("9. Выход");
             Console.Write("Ваш выбор: ");
             string choice = Console.ReadLine();
 
@@ -118,12 +114,6 @@ class Programm
                     ShowAllProducts();
                     break;
                 case "9":
-                    HistorySellProduct();
-                    break;
-                case "10":
-                    ReportProduct();
-                    break;
-                case "11":
                     Console.WriteLine("До свидания!");
                     return;
                 default:
@@ -248,8 +238,6 @@ class Programm
             product.UpdateQuantity(-amount);
             decimal total = amount * product.Price;
             var record = new SaleRecord(product.Id, product.Name, amount, total);
-            salesHistory.Push(record);
-            undoSale.Push(record);
             Console.WriteLine($"Продажа успешна. Остаток товара: {product.Quantity}");
         }
         catch (Exception ex)
@@ -316,74 +304,6 @@ class Programm
         else
         {
             Console.WriteLine("В магазине нет товаров.");
-        }
-    }
-    static void HistorySellProduct()
-    {
-        Console.WriteLine("\n--- История продаж ---");
-
-        if (!salesHistory.Any())
-        {
-            Console.WriteLine("Продаж пока не было.");
-            return;
-        }
-
-        foreach (var sale in salesHistory)
-        {
-            Console.WriteLine(sale.GetInfo());
-        }
-        Console.WriteLine("\nХотите отменить последнюю продажу? (д/н): ");
-        string choice = Console.ReadLine();
-        if (choice?.ToLower() == "д")
-        {
-            if (!undoSale.Any())
-            {
-                Console.WriteLine("Нет продаж для отмены.");
-                return;
-            }
-
-            var lastSale = undoSale.Pop();
-            var product = products.FirstOrDefault(p => p.Id == lastSale.ProductId);
-            if (product != null)
-            {
-                product.UpdateQuantity(lastSale.Quantity);
-                salesHistory = new Stack<SaleRecord>(salesHistory.Where(s => s != lastSale).Reverse());
-                Console.WriteLine("Последняя продажа отменена!");
-            }
-        }
-    }
-
-    static void ReportProduct()
-    {
-        Console.WriteLine("\n--- Отчёт о продажах ---");
-
-        if (!salesHistory.Any())
-        {
-            Console.WriteLine("Продаж пока не было.");
-            return;
-        }
-
-        
-        int totalItems = salesHistory.Sum(s => s.Quantity);
-        decimal totalRevenue = salesHistory.Sum(s => s.TotalPrice);
-
-        Console.WriteLine($"Всего продано товаров: {totalItems}");
-        Console.WriteLine($"Общая выручка: {totalRevenue:C}");
-
-        
-        var grouped = salesHistory
-            .GroupBy(s => s.ProductName)
-            .Select(g => new
-            {
-                Name = g.Key,
-                Count = g.Sum(s => s.Quantity),
-                Sum = g.Sum(s => s.TotalPrice)
-            });
-
-        Console.WriteLine("\nПродажи по товарам:");
-        foreach (var item in grouped)
-        {
-            Console.WriteLine($"{item.Name}: {item.Count} шт. на сумму {item.Sum:C}");
         }
     }
 
