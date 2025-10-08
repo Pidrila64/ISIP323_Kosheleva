@@ -13,3 +13,7 @@ while (Text.Length < 100)
     Text = Console.ReadLine();
 
 }
+string[] TextList = Text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+List<textClass> textClasses = new List<textClass>();
+textClasses.Add(new textClass(Text, TextList.Length, ShortWord(TextList), KolvoPredl(Text), KolvoGlasn(Text), KolvoSoglas(Text), LongWord(TextList), Stat(Text)));
+int id = 0;
