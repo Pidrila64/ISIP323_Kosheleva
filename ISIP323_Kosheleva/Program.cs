@@ -105,6 +105,77 @@ int KolvoPredl(string Text)
     }
     return count;
 }
+int KolvoGlasn(string Text)
+{
+    char[] GlasList = { 'А', 'О', 'У', 'Э', 'И', 'Ы', 'Е', 'Ё', 'Ю', 'Я', 'а', 'о', 'у', 'э', 'и', 'ы', 'е', 'ё', 'ю', 'я' };
+    int countG = 0;
+    foreach (char i in Text)
+    {
+        if (GlasList.Contains(i)) { countG++; }
+    }
+    return countG;
+}
+
+int KolvoSoglas(string Text)
+{
+    char[] SoglasList = { 'Б', 'В', 'Г', 'Д', 'Ж', 'З', 'Й', 'К', 'Л', 'М', 'Н', 'П', 'Р', 'С', 'Т', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ь', 'Ъ',
+    'б', 'в', 'г', 'д', 'ж', 'з', 'й', 'к', 'л', 'м', 'н', 'п', 'р', 'с', 'т', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ь', 'ъ' };
+    int countS = 0;
+    foreach (char i in Text)
+    {
+        if (SoglasList.Contains(i)) { countS++; }
+    }
+    return countS;
+}
+
+Dictionary<char, int> Stat(string Text)
+{
+    Dictionary<char, int> stat = new Dictionary<char, int>() {
+        {'А', 0 },
+        {'Б',0},
+        {'В',0},
+        {'Г',0},
+        {'Д',0},
+        {'Е',0},
+        {'Ё',0},
+        {'Ж',0},
+        {'З',0},
+        {'И',0},
+        {'Й',0},
+        {'К',0},
+        {'Л',0},
+        {'М',0},
+        {'Н',0},
+        {'О',0},
+        {'П',0},
+        {'Р',0},
+        {'С',0},
+        {'Т',0},
+        {'У',0},
+        {'Ф',0},
+        {'Х',0},
+        {'Ц',0},
+        {'Ч',0},
+        {'Ш',0},
+        {'Щ',0},
+        {'Ъ',0},
+        {'Ы',0},
+        {'Ь',0},
+        {'Э',0},
+        {'Ю',0},
+        {'Я',0},
+    };
+
+    foreach (char c in Text.ToUpper())
+    {
+        if (stat.ContainsKey(c))
+        {
+            stat[c]++;
+        }
+    }
+
+    return stat;
+}
 
 
 
