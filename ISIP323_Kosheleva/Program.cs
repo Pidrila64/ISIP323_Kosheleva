@@ -176,6 +176,32 @@ Dictionary<char, int> Stat(string Text)
 
     return stat;
 }
+public class textClass
+{
+    static public int ids = 0;
+    public int id { get; }
+    public string text { get; }
+    public int countWords { get; }
+    public string shortWord { get; }
+    public int countPredl { get; }
+    public int countGlas { get; }
+    public int countSogl { get; }
+    public string longWord { get; }
+    public Dictionary<char, int> Statics { get; }
 
+    public textClass(string Text, int countWords, string shortWord, int countPredl, int countGlas, int countSogl, string longWord, Dictionary<char, int> Statics)
+    {
+        ids += 1;
+        id = ids;
+        this.text = Text;
+        this.countWords = countWords;
+        this.shortWord = shortWord;
+        this.countPredl = countPredl;
+        this.countGlas = countGlas;
+        this.countSogl = countSogl;
+        this.longWord = longWord;
+        this.Statics = Statics;
+    }
+}
 
 
