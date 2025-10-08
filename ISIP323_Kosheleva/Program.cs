@@ -62,6 +62,19 @@ while (true)
         default: Console.WriteLine("Неверная команда. Попробуйте снова."); break;
     }
 }
+void Zamena(List<textClass> textClasses)
+{
+    Console.Write("Введите текст на русском(минимум 100 символов): ");
+    string newText = Console.ReadLine();
+    while (newText.Length < 100)
+    {
+        Console.WriteLine("Слишком короткий текст!");
+        Console.Write("Введите текст на русском(минимум 100 символов): ");
+        newText = Console.ReadLine();
+    }
+    string[] newTextList = newText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+    textClasses.Add(new textClass(newText, newTextList.Length, ShortWord(newTextList), KolvoPredl(newText), KolvoGlasn(newText), KolvoSoglas(newText), LongWord(newTextList), Stat(newText)));
+}
 
 
 
