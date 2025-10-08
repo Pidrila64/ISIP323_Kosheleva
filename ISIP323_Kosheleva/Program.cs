@@ -75,6 +75,36 @@ void Zamena(List<textClass> textClasses)
     string[] newTextList = newText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
     textClasses.Add(new textClass(newText, newTextList.Length, ShortWord(newTextList), KolvoPredl(newText), KolvoGlasn(newText), KolvoSoglas(newText), LongWord(newTextList), Stat(newText)));
 }
+string ShortWord(string[] TextList)
+{
+    string min = TextList[0];
+    foreach (var word in TextList)
+    {
+        if (word.Length < min.Length) { min = word; }
+    }
+    return min;
+}
+
+string LongWord(string[] TextList)
+{
+    string max = TextList[0];
+    foreach (var word in TextList)
+    {
+        if (word.Length > max.Length) { max = word; }
+    }
+    return max;
+}
+
+int KolvoPredl(string Text)
+{
+    char[] prep = { '.', '!', '?', };
+    int count = 0;
+    for (int i = 0; i < Text.Length; i++)
+    {
+        if (prep.Contains(Text[i])) { count++; }
+    }
+    return count;
+}
 
 
 
