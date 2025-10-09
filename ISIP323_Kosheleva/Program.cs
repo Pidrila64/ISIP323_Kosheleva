@@ -52,6 +52,21 @@
         }
     }
 
+    static void ShowAllBooks()
+    {
+        if (library.Count == 0)
+        {
+            Console.WriteLine("В библиотеке нет книг");
+            return;
+        }
+
+        Console.WriteLine("\nВсе книги:\n");
+        foreach (var book in library)
+        {
+            Console.WriteLine(book.GetInfo());
+        }
+    }
+
     static void LoadSampleBooks()
     {
         library.Add(new Book("Властелин Колец", 1000, 1954, "Джон Толкин", Genre.Fantasy));
@@ -79,17 +94,17 @@
 
     static void FindByTitle()
     {
-        
+       
     }
 
     static void FindByAuthor()
     {
-        
+
     }
 
     static void FindByGenre()
     {
-        
+
     }
 
     static void SortByTitle()
@@ -99,6 +114,7 @@
 
     static void SortByYear()
     {
+        
     }
 
     static void ShowCheapest()
@@ -128,7 +144,6 @@
 
     static void ShowResults()
     {
-        
 }
 
 public enum Genre
