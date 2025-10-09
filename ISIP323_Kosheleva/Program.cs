@@ -174,27 +174,40 @@
 
     static void SortByTitle()
     {
-        
+        var sorted = library.OrderBy(b => b.Title).ToList();
+        ShowResults(sorted, "книги отсортированные по названию");
     }
 
     static void SortByYear()
     {
-        
+        var sorted = library.OrderBy(b => b.Year).ToList();
+        ShowResults(sorted, "книги отсортированные по году");
     }
 
     static void ShowCheapest()
     {
-        
+        var cheapest = library.OrderBy(b => b.Cost).FirstOrDefault();
+        if (cheapest != null)
+            Console.WriteLine($"Самая дешевая: {cheapest.GetInfo()}");
     }
 
     static void ShowMostExpensive()
     {
-        
+        var expensive = library.OrderByDescending(b => b.Cost).FirstOrDefault();
+        if (expensive != null)
+            Console.WriteLine($"Самая дорогая: {expensive.GetInfo()}");
     }
 
     static void ShowAuthorStats()
     {
-        
+        var stats = library.GroupBy(b => b.Author)
+                          .Select(g => new { Author = g.Key, Count = g.Count() });
+
+        Console.WriteLine("Книг по авторам:");
+        foreach (var stat in stats)
+        {
+            Console.WriteLine($"{stat.Author}: {stat.Count}");
+        }
     }
 
     static int GetNumber()
