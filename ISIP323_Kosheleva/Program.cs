@@ -113,17 +113,37 @@
 
     static void DeleteBook()
     {
-        
-    }
+        static void DeleteBook()
+        {
+            Console.Write("ID книги для удаления: ");
+            int id = GetNumber();
+            var book = library.FirstOrDefault(b => b.ID == id);
+            if (book != null)
+            {
+                library.Remove(book);
+                Console.WriteLine("Удалено");
+            }
+            else
+            {
+                Console.WriteLine("Книга не найдена");
+            }
+
+        }
 
     static void FindByTitle()
     {
-       
+        Console.Write("Название: ");
+        string search = Console.ReadLine().ToLower();
+        var found = library.Where(b => b.Title.ToLower().Contains(search)).ToList();
+        ShowResults(found, "книги");
     }
 
     static void FindByAuthor()
     {
-
+        Console.Write("Автор: ");
+        string search = Console.ReadLine().ToLower();
+        var found = library.Where(b => b.Author.ToLower().Contains(search)).ToList();
+        ShowResults(found, "книги");
     }
 
     static void FindByGenre()
