@@ -210,18 +210,38 @@
         }
     }
 
-    static int GetNumber()
+    static int GetNumber(int min = 1, int max = int.MaxValue)
     {
-        
+        int number;
+        while (!int.TryParse(Console.ReadLine(), out number) || number < min || number > max)
+        {
+            Console.Write($"Введи число от {min} до {max}: ");
+        }
+        return number;
     }
 
     static decimal GetDecimal()
     {
-        
+        decimal number;
+        while (!decimal.TryParse(Console.ReadLine(), out number) || number <= 0)
+        {
+            Console.Write("Введи положительное число: ");
+        }
+        return number;
     }
 
-    static void ShowResults()
+    static void ShowResults(List<Book> books, string description)
     {
+        if (books.Count == 0)
+        {
+            Console.WriteLine("Ничего не найдено");
+            return;
+        }
+
+        Console.WriteLine($"\n{description}:\n");
+        foreach (var book in books)
+            Console.WriteLine(book.GetInfo());
+    }
 }
 
 public enum Genre
