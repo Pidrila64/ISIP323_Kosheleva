@@ -84,7 +84,31 @@
 
     static void AddNewBook()
     {
-        
+        Console.Write("Название: ");
+        string title = Console.ReadLine();
+
+        Console.Write("Автор: ");
+        string author = Console.ReadLine();
+
+        Console.Write("Год: ");
+        int year = GetNumber();
+
+        Console.Write("Цена: ");
+        decimal price = GetDecimal();
+
+        Console.WriteLine("\nЖанры:");
+        var genres = Enum.GetValues(typeof(Genre));
+        for (int i = 0; i < genres.Length; i++)
+        {
+            Console.WriteLine($"{i + 1}. {genres.GetValue(i)}");
+        }
+
+        Console.Write("Выбери жанр: ");
+        int genreIndex = GetNumber(1, genres.Length) - 1;
+        Genre selectedGenre = (Genre)genres.GetValue(genreIndex);
+
+        library.Add(new Book(title, price, year, author, selectedGenre));
+        Console.WriteLine("Книга добавлена!");
     }
 
     static void DeleteBook()
