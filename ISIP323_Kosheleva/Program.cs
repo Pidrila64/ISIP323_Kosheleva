@@ -113,22 +113,19 @@
 
     static void DeleteBook()
     {
-        static void DeleteBook()
+        Console.Write("ID книги для удаления: ");
+        int id = GetNumber();
+        var book = library.FirstOrDefault(b => b.ID == id);
+        if (book != null)
         {
-            Console.Write("ID книги для удаления: ");
-            int id = GetNumber();
-            var book = library.FirstOrDefault(b => b.ID == id);
-            if (book != null)
-            {
-                library.Remove(book);
-                Console.WriteLine("Удалено");
-            }
-            else
-            {
-                Console.WriteLine("Книга не найдена");
-            }
-
+            library.Remove(book);
+            Console.WriteLine("Удалено");
         }
+        else
+        {
+            Console.WriteLine("Книга не найдена");
+        }
+    }
 
     static void FindByTitle()
     {
@@ -148,29 +145,29 @@
 
     static void FindByGenre()
     {
-            if (library.Count == 0)
-            {
-                Console.WriteLine("Библиотека пуста");
-                return;
-            }
-
-            Console.WriteLine("Жанры:");
-            foreach (var genre in Enum.GetValues(typeof(Genre)))
-                Console.WriteLine($"{(int)genre} — {genre}");
-
-            Console.Write("Выбери жанр: ");
-            int choice = GetNumber();
-
-            if (!Enum.IsDefined(typeof(Genre), choice))
-            {
-                Console.WriteLine("Нет такого жанра");
-                return;
-            }
-
-            Genre genreToFind = (Genre)choice;
-            var found = library.Where(b => b.Category == genreToFind).ToList();
-            ShowResults(found, $"книги жанра {genreToFind}");
+        if (library.Count == 0)
+        {
+            Console.WriteLine("Библиотека пуста");
+            return;
         }
+
+        Console.WriteLine("Жанры:");
+        foreach (var genre in Enum.GetValues(typeof(Genre)))
+            Console.WriteLine($"{(int)genre} — {genre}");
+
+        Console.Write("Выбери жанр: ");
+        int choice = GetNumber();
+
+        if (!Enum.IsDefined(typeof(Genre), choice))
+        {
+            Console.WriteLine("Нет такого жанра");
+            return;
+        }
+
+        Genre genreToFind = (Genre)choice;
+        var found = library.Where(b => b.Category == genreToFind).ToList();
+        ShowResults(found, $"книги жанра {genreToFind}");
+    }
 
     static void SortByTitle()
     {
@@ -243,20 +240,18 @@
             Console.WriteLine(book.GetInfo());
     }
 }
-
 public enum Genre
 {
     Romantic = 1,
     Fantasy = 2,
     Drama = 3,
-    Detective = 4,      
-    ScienceFiction = 5  
+    Detective = 4,
+    ScienceFiction = 5
 }
 
 public class Book
 {
     private static int lastId = 1;
-
     public int ID { get; }
     public string Title { get; }
     public string Author { get; }
