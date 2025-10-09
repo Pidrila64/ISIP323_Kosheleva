@@ -148,8 +148,29 @@
 
     static void FindByGenre()
     {
+            if (library.Count == 0)
+            {
+                Console.WriteLine("Библиотека пуста");
+                return;
+            }
 
-    }
+            Console.WriteLine("Жанры:");
+            foreach (var genre in Enum.GetValues(typeof(Genre)))
+                Console.WriteLine($"{(int)genre} — {genre}");
+
+            Console.Write("Выбери жанр: ");
+            int choice = GetNumber();
+
+            if (!Enum.IsDefined(typeof(Genre), choice))
+            {
+                Console.WriteLine("Нет такого жанра");
+                return;
+            }
+
+            Genre genreToFind = (Genre)choice;
+            var found = library.Where(b => b.Category == genreToFind).ToList();
+            ShowResults(found, $"книги жанра {genreToFind}");
+        }
 
     static void SortByTitle()
     {
