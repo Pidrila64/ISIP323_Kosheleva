@@ -1,142 +1,168 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace LibraryManagementSystem
+﻿public static class Program
 {
-    public enum Genre
+    static List<Book> library = new List<Book>();
+
+    static void ShowMenu()
     {
-        Fantasy = 1,        
-        ScienceFiction = 2, 
-        Mystery = 3,        
-        Romance = 4,        
-        Horror = 5,         
-        Biography = 6,      
-        History = 7         
+        Console.WriteLine("\n0. Все книги");
+        Console.WriteLine("1. Добавить книгу");
+        Console.WriteLine("2. Удалить книгу");
+        Console.WriteLine("3. Найти по названию");
+        Console.WriteLine("4. Найти по автору");
+        Console.WriteLine("5. Найти по жанру");
+        Console.WriteLine("6. Сортировать по названию");
+        Console.WriteLine("7. Сортировать по году");
+        Console.WriteLine("8. Самая дешевая");
+        Console.WriteLine("9. Самая дорогая");
+        Console.WriteLine("10. Статистика по авторам");
+        Console.WriteLine("11. Выход");
+        Console.Write("Выбор: ");
+    }
+    public static void Main()
+    {
+        LoadSampleBooks();
+
+        Console.WriteLine("Библиотека книг");
+
+        while (true)
+        {
+            ShowMenu();
+            string option = Console.ReadLine();
+
+            switch (option)
+            {
+                case "0": ShowAllBooks(); break;
+                case "1": AddNewBook(); break;
+                case "2": DeleteBook(); break;
+                case "3": FindByTitle(); break;
+                case "4": FindByAuthor(); break;
+                case "5": FindByGenre(); break;
+                case "6": SortByTitle(); break;
+                case "7": SortByYear(); break;
+                case "8": ShowCheapest(); break;
+                case "9": ShowMostExpensive(); break;
+                case "10": ShowAuthorStats(); break;
+                case "11":
+                    Console.WriteLine("гг");
+                    return;
+                default:
+                    Console.WriteLine("Нет такого варианта");
+                    break;
+            }
+        }
     }
 
-    public class Book
+    static void LoadSampleBooks()
     {
-        private static int nextId = 1;
+        library.Add(new Book("Властелин Колец", 1000, 1954, "Джон Толкин", Genre.Fantasy));
+        library.Add(new Book("Хоббит", 1900, 1937, "Джон Толкин", Genre.Fantasy));
+        library.Add(new Book("Вишневый сад", 800, 1904, "Антон Чехов", Genre.Drama));
+        library.Add(new Book("Маленький принц", 950, 1943, "Антуан де Сент-Экзюпери", Genre.Romantic));
+        library.Add(new Book("Портрет Дориана Грея", 1150, 1890, "Оскар Уайльд", Genre.Drama));
+        library.Add(new Book("Убийство в Восточном экспрессе", 1300, 1934, "Агата Кристи", Genre.Detective));
+        library.Add(new Book("Десять негритят", 1250, 1939, "Агата Кристи", Genre.Detective));
+        library.Add(new Book("1984", 1600, 1949, "Джордж Оруэлл", Genre.ScienceFiction));
+        library.Add(new Book("Солярис", 1350, 1961, "Станислав Лем", Genre.ScienceFiction));
 
-        public int Id { get; }
-        public string Title { get; private set; }
-        public string Author { get; private set; }
-        public Genre Genre { get; private set; }
-        public int Year { get; private set; }
-        public decimal Price { get; private set; }
-
-        public Book(string title, string author, Genre genre, int year, decimal price)
-        {
-            if (string.IsNullOrWhiteSpace(title))
-                throw new ArgumentException("Название книги не может быть пустым");
-            if (string.IsNullOrWhiteSpace(author))
-                throw new ArgumentException("Автор не может быть пустым");
-            if (year <= 0 || year > DateTime.Now.Year)
-                throw new ArgumentOutOfRangeException("Год издания должен быть положительным и не больше текущего года");
-            if (price <= 0)
-                throw new ArgumentOutOfRangeException("Цена должна быть положительной");
-
-            Id = nextId++;
-            Title = title;
-            Author = author;
-            Genre = genre;
-            Year = year;
-            Price = price;
-        }
-
-        public string Print()
-        {
-            return $"ID: {Id}, Название: {Title}, Автор: {Author}, " +
-                   $"Жанр: {Genre}, Год: {Year}, Цена: {Price:C}";
-        }
+        Console.WriteLine("Добавлено 9 тестовых книг");
     }
 
-    class Program
+    static void AddNewBook()
     {
-        private static List<Book> books = new List<Book>();
+        
+    }
 
-        static void Main(string[] args)
-        {
-            AddTestData();
-            ShowMainMenu();
-        }
+    static void DeleteBook()
+    {
+        
+    }
 
-        static void AddTestData()
-        {
-            try
-            {
-                books.Add(new Book("Властелин Колец", "Дж. Р. Р. Толкин", Genre.Fantasy, 1954, 1200));
-                books.Add(new Book("1984", "Джордж Оруэлл", Genre.ScienceFiction, 1949, 800));
-                books.Add(new Book("Убийство в Восточном экспрессе", "Агата Кристи", Genre.Mystery, 1934, 650));
-                books.Add(new Book("Гордость и предубеждение", "Джейн Остин", Genre.Romance, 1813, 550));
-                books.Add(new Book("Дракула", "Брэм Стокер", Genre.Horror, 1897, 700));
-                Console.WriteLine("Добавлено 5 тестовых книг");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Ошибка при добавлении тестовых данных: {ex.Message}");
-            }
-        }
+    static void FindByTitle()
+    {
+        
+    }
 
-        static void ShowMainMenu()
-        {
-            Console.WriteLine("=== Система учёта книг в библиотеке ===");
+    static void FindByAuthor()
+    {
+        
+    }
 
-            while (true)
-            {
-                Console.WriteLine("\n--- Главное меню ---");
-                Console.WriteLine("1. Добавить книгу");
-                Console.WriteLine("2. Удалить книгу по ID");
-                Console.WriteLine("3. Поиск книг");
-                Console.WriteLine("4. Сортировка книг");
-                Console.WriteLine("5. Самая дорогая и дешёвая книга");
-                Console.WriteLine("6. Группировка книг по авторам");
-                Console.WriteLine("7. Вывод всех книг");
-                Console.WriteLine("8. Выход");
-                Console.Write("Ваш выбор: ");
+    static void FindByGenre()
+    {
+        
+    }
 
-                string choice = Console.ReadLine();
+    static void SortByTitle()
+    {
+        
+    }
 
-                switch (choice)
-                {
-                    case "1":
-                        AddBook();
-                        break;
-                    case "2":
-                        RemoveBook();
-                        break;
-                    case "3":
-                        ShowSearchMenu();
-                        break;
-                    case "4":
-                        ShowSortMenu();
-                        break;
-                    case "5":
-                        ShowPriceExtremes();
-                        break;
-                    case "6":
-                        GroupBooksByAuthor();
-                        break;
-                    case "7":
-                        ShowAllBooks();
-                        break;
-                    case "8":
-                        Console.WriteLine("До свидания!");
-                        return;
-                    default:
-                        Console.WriteLine("Неверный выбор. Попробуйте снова.");
-                        break;
-                }
-            }
-        }
+    static void SortByYear()
+    {
+    }
 
-        static void AddBook() { }
-        static void RemoveBook() { }
-        static void ShowSearchMenu() { }
-        static void ShowSortMenu() { }
-        static void ShowPriceExtremes() { }
-        static void GroupBooksByAuthor() { }
-        static void ShowAllBooks() { }
+    static void ShowCheapest()
+    {
+        
+    }
+
+    static void ShowMostExpensive()
+    {
+        
+    }
+
+    static void ShowAuthorStats()
+    {
+        
+    }
+
+    static int GetNumber()
+    {
+        
+    }
+
+    static decimal GetDecimal()
+    {
+        
+    }
+
+    static void ShowResults()
+    {
+        
+}
+
+public enum Genre
+{
+    Romantic = 1,
+    Fantasy = 2,
+    Drama = 3,
+    Detective = 4,      
+    ScienceFiction = 5  
+}
+
+public class Book
+{
+    private static int lastId = 1;
+
+    public int ID { get; }
+    public string Title { get; }
+    public string Author { get; }
+    public Genre Category { get; }
+    public int Year { get; }
+    public decimal Cost { get; }
+
+    public Book(string title, decimal cost, int year, string author, Genre genre)
+    {
+        ID = lastId++;
+        Title = title ?? "Без названия";
+        Cost = cost > 0 ? cost : 500;
+        Year = year > 0 ? year : DateTime.Now.Year;
+        Author = author ?? "Неизвестен";
+        Category = genre;
+    }
+
+    public string GetInfo()
+    {
+        return $"ID: {ID}, Книга: {Title}, Цена: {Cost:C}, Год: {Year}, Автор: {Author}, Жанр: {Category}";
     }
 }
