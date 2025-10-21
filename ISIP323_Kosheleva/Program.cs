@@ -146,7 +146,7 @@ class Enemy
             Console.WriteLine($"{Name} нанес крит");
         }
 
-        if (dmg < 1) dmg = 1;
+        if (dmg < 0) dmg = 0;
         player.TakeDamage(dmg);
 
         if (CanFreeze && rnd.Next(100) < FreezeChance)
@@ -164,7 +164,7 @@ class Enemy
 }
 class Goblin : Enemy
 {
-    public Goblin() : base(30, 5, 2)
+    public Goblin() : base(30, 10, 2)
     {
         Name = "Гоблин";
         HasCrit = true;
@@ -175,7 +175,7 @@ class Goblin : Enemy
 
 class Skelet : Enemy
 {
-    public Skelet() : base(40, 6, 3)
+    public Skelet() : base(40, 15, 3)
     {
         Name = "Скелет";
         IgnoreDefense = true;
@@ -185,7 +185,7 @@ class Skelet : Enemy
 
 class Mag : Enemy
 {
-    public Mag() : base(25, 4, 2)
+    public Mag() : base(25, 10, 2)
     {
         Name = "Маг";
         CanFreeze = true;
