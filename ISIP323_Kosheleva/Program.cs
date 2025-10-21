@@ -285,13 +285,13 @@ class Game
             player.Heal();
         else if (roll == 1)
         {
-            int atk = rnd.Next(5, 16);
+            int atk = rnd.Next(5, 50);
             Weapon NewWeapon = new Weapon($"меч + {atk}", atk);
             player.EquipWeapon(NewWeapon);
         }
         else
         {
-            int def = rnd.Next(1, 11);
+            int def = rnd.Next(1, 99);
             Armor NewArmor = new Armor($"Броня + {def}", def);
             player.EquipArmor(NewArmor);
         }
@@ -342,11 +342,12 @@ class Game
 
     public static void MainGame()
     {
-        Player player = new Player("Герой", 100, new Weapon("Меч 10", 10), new Armor("Броня 5", 5));
-        int turn = 1;
+        Player player = new Player("Герой", 100, new Weapon("палец 5", 5), new Armor("Броня-кожа 5", 5));
+        int turn = 0;
 
         while (player.IsAlive())
         {
+            turn++;
             Console.WriteLine($"\n===== Ход {turn} =====");
             bool isBossTurn = (turn % 10 == 0);
             bool chestEvent = rnd.Next(2) == 0;
@@ -363,10 +364,9 @@ class Game
                 if (!player.IsAlive()) break;
             }
 
-            turn++;
         }
 
-        Console.WriteLine($"Конец! Вы прошли {turn - 1} ходов.");
+        Console.WriteLine($"Конец! Вы прошли {turn} ходов.");
     }
 }
 
