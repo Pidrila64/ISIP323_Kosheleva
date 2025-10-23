@@ -97,7 +97,16 @@ namespace UniversityManagementSystem
 
         public void CalculateAverageGrade()
         {
-            
+            if (Grades.Count == 0) { AverageGrade = 0; return; }
+
+            double total = 0;
+            int count = 0;
+            foreach (var courseGrades in Grades.Values)
+            {
+                total += courseGrades.Sum();
+                count += courseGrades.Count;
+            }
+            AverageGrade = count > 0 ? total / count : 0;
         }
     }
 
