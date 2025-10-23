@@ -126,17 +126,27 @@ namespace UniversityManagementSystem
 
         public override void DisplayInfo()
         {
-            
+            Console.WriteLine($"Преподаватель ID: {TeacherId}");
+            base.DisplayInfo();
+            Console.WriteLine($"Отдел: {Department}\nКоличество преподаваемых курсов: {TeachingCourses.Count}");
         }
 
         public void AddCourse(Course course)
         {
-            
+            if (course == null) throw new ArgumentNullException(nameof(course));
+            if (TeachingCourses.Contains(course)) return;
+
+            course.Instructor = this;
+            TeachingCourses.Add(course);
         }
 
         public void GradeStudent(Student student, Course course, double grade)
         {
-            
+            if (student == null || course == null) throw new ArgumentNullException();
+            if (!TeachingCourses.Contains(course)) throw new InvalidOperationException("Преподаватель не ведет этот курс");
+            if (!course.EnrolledStudents.Contains(student)) throw new InvalidOperationException("Студент не записан на этот курс");
+
+            student.AddGrade(course, grade);
         }
     }
 
