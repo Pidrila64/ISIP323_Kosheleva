@@ -254,12 +254,34 @@ namespace UniversityManagementSystem
 
         public void DisplayAllTeachers()
         {
-            
+            if (Teachers.Count == 0)
+            {
+                Console.WriteLine("В университете нет преподавателей");
+                return;
+            }
+
+            Console.WriteLine("Все преподаватели университета:");
+            foreach (var teacher in Teachers.OrderBy(t => t.TeacherId))
+            {
+                teacher.DisplayInfo();
+                Console.WriteLine("---");
+            }
         }
 
         public void DisplayAllCourses()
         {
-            
+            if (Courses.Count == 0)
+            {
+                Console.WriteLine("В университете нет курсов");
+                return;
+            }
+
+            Console.WriteLine("Все курсы университета:");
+            foreach (var course in Courses.OrderBy(c => c.CourseId))
+            {
+                course.DisplayCourseInfo();
+                Console.WriteLine("---");
+            }
         }
     }
 
@@ -269,27 +291,103 @@ namespace UniversityManagementSystem
 
         public void DisplayMainMenu()
         {
-            
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("=== СИСТЕМА УПРАВЛЕНИЯ УНИВЕРСИТЕТОМ ===");
+                Console.WriteLine("1. Управление студентами\n2. Управление преподавателями\n3. Управление курсами\n4. Запись на курсы\n0. Выход");
+                Console.Write("Выберите опцию: ");
+
+                switch (Console.ReadLine())
+                {
+                    case "1": HandleStudentManagement(); break;
+                    case "2": HandleTeacherManagement(); break;
+                    case "3": HandleCourseManagement(); break;
+                    case "4": HandleEnrollment(); break;
+                    case "0": return;
+                    default: WaitForKey("Неверный выбор"); break;
+                }
+            }
         }
 
         private void HandleStudentManagement()
         {
-           
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("=== УПРАВЛЕНИЕ СТУДЕНТАМИ ===");
+                Console.WriteLine("1. Добавить студента\n2. Просмотреть всех студентов\n0. Назад");
+
+                switch (Console.ReadLine())
+                {
+                    case "1": AddStudent(); break;
+                    case "2": university.DisplayAllStudents(); WaitForKey(); break;
+                    case "0": return;
+                    default: WaitForKey("Неверный выбор"); break;
+                }
+            }
         }
 
         private void HandleTeacherManagement()
         {
-           
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("=== УПРАВЛЕНИЕ ПРЕПОДАВАТЕЛЯМИ ===");
+                Console.WriteLine("1. Добавить преподавателя\n2. Просмотреть всех преподавателей\n0. Назад");
+
+                switch (Console.ReadLine())
+                {
+                    case "1": AddTeacher(); break;
+                    case "2": university.DisplayAllTeachers(); WaitForKey(); break;
+                    case "0": return;
+                    default: WaitForKey("Неверный выбор"); break;
+                }
+            }
         }
 
         private void HandleCourseManagement()
         {
-            
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("=== УПРАВЛЕНИЕ КУРСАМИ ===");
+                Console.WriteLine("1. Добавить курс\n2. Просмотреть все курсы\n0. Назад");
+
+                switch (Console.ReadLine())
+                {
+                    case "1": AddCourse(); break;
+                    case "2": university.DisplayAllCourses(); WaitForKey(); break;
+                    case "0": return;
+                    default: WaitForKey("Неверный выбор"); break;
+                }
+            }
         }
 
         private void HandleEnrollment()
         {
-            
+            Console.Clear();
+            Console.WriteLine("=== ЗАПИСЬ НА КУРСЫ ===");
+
+            try
+            {
+                Console.Write("Введите ID студента: ");
+                if (!int.TryParse(Console.ReadLine(), out int studentId)) { WaitForKey("Неверный формат ID"); return; }
+
+                Console.Write("Введите ID курса: ");
+                if (!int.TryParse(Console.ReadLine(), out int courseId)) { WaitForKey("Неверный формат ID"); return; }
+
+                var student = university.FindStudentById(studentId);
+                var course = university.FindCourseById(courseId);
+
+                if (student != null && course != null)
+                    student.EnrollInCourse(course);
+                else
+                    Console.WriteLine("Студент или курс не найден");
+            }
+            catch (Exception ex) { Console.WriteLine($"Ошибка: {ex.Message}"); }
+
+            WaitForKey();
         }
 
         private void AddStudent()
