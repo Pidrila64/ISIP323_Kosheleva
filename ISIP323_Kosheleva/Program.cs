@@ -28,7 +28,7 @@ namespace UniversityManagementSystem
 
         public virtual void DisplayInfo()
         {
-            
+            Console.WriteLine($"Имя: {Name}\nВозраст: {Age}\nКонтактная информация: {ContactInfo}");
         }
     }
 
@@ -86,7 +86,13 @@ namespace UniversityManagementSystem
 
         public void AddGrade(Course course, double grade)
         {
-            
+            if (course == null) throw new ArgumentNullException(nameof(course));
+            if (grade < 0 || grade > 100) throw new ArgumentException("Оценка должна быть от 0 до 100");
+            if (!Courses.Contains(course)) throw new InvalidOperationException("Студент не записан на этот курс");
+
+            if (!Grades.ContainsKey(course)) Grades[course] = new List<double>();
+            Grades[course].Add(grade);
+            CalculateAverageGrade();
         }
 
         public void CalculateAverageGrade()
