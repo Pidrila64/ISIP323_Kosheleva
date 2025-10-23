@@ -215,26 +215,41 @@ namespace UniversityManagementSystem
 
         public void AddStudent(Student student)
         {
-            
+            if (student == null) throw new ArgumentNullException(nameof(student));
+            Students.Add(student);
         }
 
         public void AddTeacher(Teacher teacher)
         {
-            
+            if (teacher == null) throw new ArgumentNullException(nameof(teacher));
+            Teachers.Add(teacher);
         }
 
         public void AddCourse(Course course)
         {
-            
+            if (course == null) throw new ArgumentNullException(nameof(course));
+            Courses.Add(course);
         }
 
         public Student FindStudentById(int studentId) => Students.FirstOrDefault(s => s.StudentId == studentId);
         public Teacher FindTeacherById(int teacherId) => Teachers.FirstOrDefault(t => t.TeacherId == teacherId);
         public Course FindCourseById(int courseId) => Courses.FirstOrDefault(c => c.CourseId == courseId);
 
+        // Добавленные методы для отображения
         public void DisplayAllStudents()
         {
-            
+            if (Students.Count == 0)
+            {
+                Console.WriteLine("В университете нет студентов");
+                return;
+            }
+
+            Console.WriteLine("Все студенты университета:");
+            foreach (var student in Students.OrderBy(s => s.StudentId))
+            {
+                student.DisplayInfo();
+                Console.WriteLine("---");
+            }
         }
 
         public void DisplayAllTeachers()
