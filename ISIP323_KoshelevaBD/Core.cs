@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ISIP323_KoshelevaBD
+{
+    internal class Core
+    {
+        public static ISIP323_KoshelevaBDEntities1 Context = new ISIP323_KoshelevaBDEntities1();
+    }
+}
