@@ -392,22 +392,61 @@ namespace UniversityManagementSystem
 
         private void AddStudent()
         {
-            
+            try
+            {
+                Console.Write("Введите имя студента: "); string name = Console.ReadLine();
+                Console.Write("Введите возраст студента: ");
+                if (!int.TryParse(Console.ReadLine(), out int age)) { WaitForKey("Неверный формат возраста"); return; }
+                Console.Write("Введите контактную информацию: "); string contactInfo = Console.ReadLine();
+
+                university.AddStudent(new Student(name, age, contactInfo));
+            }
+            catch (Exception ex) { Console.WriteLine($"Ошибка: {ex.Message}"); }
+            WaitForKey();
         }
 
         private void AddTeacher()
         {
-            
+            try
+            {
+                Console.Write("Введите имя преподавателя: "); string name = Console.ReadLine();
+                Console.Write("Введите возраст преподавателя: ");
+                if (!int.TryParse(Console.ReadLine(), out int age)) { WaitForKey("Неверный формат возраста"); return; }
+                Console.Write("Введите контактную информацию: "); string contactInfo = Console.ReadLine();
+
+                Console.WriteLine("Выберите отдел:");
+                foreach (var dept in Enum.GetValues(typeof(Department)))
+                    Console.WriteLine($"{(int)dept}. {dept}");
+
+                if (!int.TryParse(Console.ReadLine(), out int deptIndex) || !Enum.IsDefined(typeof(Department), deptIndex))
+                { WaitForKey("Неверный выбор отдела"); return; }
+
+                university.AddTeacher(new Teacher(name, age, contactInfo, (Department)deptIndex));
+            }
+            catch (Exception ex) { Console.WriteLine($"Ошибка: {ex.Message}"); }
+            WaitForKey();
         }
 
         private void AddCourse()
         {
-            
+            try
+            {
+                Console.Write("Введите название курса: "); string name = Console.ReadLine();
+                Console.Write("Введите описание курса: "); string description = Console.ReadLine();
+                Console.Write("Введите максимальное количество студентов: ");
+                if (!int.TryParse(Console.ReadLine(), out int maxStudents)) { WaitForKey("Неверный формат числа"); return; }
+
+                university.AddCourse(new Course(name, description, maxStudents));
+            }
+            catch (Exception ex) { Console.WriteLine($"Ошибка: {ex.Message}"); }
+            WaitForKey();
         }
 
         private void WaitForKey(string message = null)
         {
-            
+            if (message != null) Console.WriteLine(message);
+            Console.WriteLine("\nНажмите любую клавишу для продолжения...");
+            Console.ReadKey();
         }
     }
 
