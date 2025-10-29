@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,143 +10,159 @@ namespace ISIP323_Kosheleva_BD
 {
     internal class Program
     {
-        public static Random random = new Random();
-        public static decimal Balance;
-        public static List<string> NameDetails = new List<string>();
-        public static List<Details> details = Core.Context.Details.ToList();
-
-
-
-        public static void Create()
+        static void Main()
         {
-            NameDetails.Add("Трансмиссия");
-            NameDetails.Add("Двигатель");
-            NameDetails.Add("Коробка передач");
-            NameDetails.Add("Колесо");
-            NameDetails.Add("Бензобак");
 
-            Balance = random.Next(1000, 10000);
-            foreach (string s in NameDetails)
+            decimal balance = 5000m;
+            bool gameOver = false;
+            Random random = new Random();
+
+            List<Details> parts = Core.Context.Details.ToList();
+
+            Console.WriteLine("=== АВТОМАСТЕРСКАЯ ===");
+            Console.WriteLine("Добро пожаловать в автомастерскую!");
+            Console.WriteLine($"Ваш начальный баланс: {balance} руб.");
+            Console.WriteLine("Правила:");
+            Console.WriteLine("- Принимайте клиентов и ремонтируйте их машины");
+            Console.WriteLine("- Если возьметесь за ремонт без нужной детали - штраф 100 руб.");
+            Console.WriteLine("- Если откажетесь от ремонта - штраф 50 руб.");
+            Console.WriteLine("- Покупайте детали в магазине");
+            Console.WriteLine("- Игра окончена, когда деньги закончатся");
+            Console.WriteLine("------------------------");
+
+            while (!gameOver)
             {
 
-                Details newDetail = new Details
+                Details brokenPart = parts[random.Next(parts.Count)];
+                decimal repairPayment = brokenPart.Price * 1.5m;
+
+                Console.WriteLine($"\nПриехал клиент! Сломано: {brokenPart.Name}");
+                Console.WriteLine($"Оплата за ремонт: {repairPayment} руб.");
+                Console.WriteLine($"Ваш баланс: {balance} руб.");
+                Console.WriteLine($"Деталь '{brokenPart.Name}' в наличии: {brokenPart.Count} шт.");
+
+            Label:
+                Console.WriteLine("\nВыберите действие:");
+                Console.WriteLine("1 - Починить машину");
+                Console.WriteLine("2 - Отказаться от ремонта");
+                Console.WriteLine("3 - Купить детали в магазине");
+                Console.WriteLine("4 - Показать склад");
+                Console.WriteLine("0 - Выйти из игры");
+
+                Console.Write("Ваш выбор: ");
+                string choice = Console.ReadLine();
+
+                switch (choice)
                 {
-
-                    Name = s,
-                    Count = 2,
-                    Price = random.Next(100, 10000)
-                };
-                Core.Context.Details.Add(newDetail);
-                    
-            }
-            Core.Context.SaveChanges();
-        }
-        public static void game()
-        {
-            Console.WriteLine("----------------------------------------------------------");
-            Console.WriteLine("Сейчас на складе есть:");
-            foreach (Details det in details)
-            {
-                Console.WriteLine($"{det.Name},себестоимость-{det.Price},колличество-{det.Count}");
-            }
-            Console.WriteLine($"{Balance}-баланс");
-            int temp_break = random.Next(0, NameDetails.Count);
-            Console.WriteLine($"К вам приехал клиент,и у него сломано {NameDetails[temp_break]}\nвыберете какую деталь вы ему поставите");
-            int temp_choice = Convert.ToInt32(Console.ReadLine());
-            int coun;
-            foreach (Details det in details)
-            {
-                if (det.Name == NameDetails[temp_choice])
-                {
-                    coun = det.Count;
-                }
-            }
-            if (temp_choice == temp_break)
-            {
-
-                Console.WriteLine("Ты правильно выбрал деталь и починил машину!");
-                Balance = Balance + ((details.First(u => u.Name == NameDetails[temp_choice]).Price / 100) * 20);
-
-                Details editpare = Core.Context.Details.ToList().Last(u => u.Name == details[temp_choice].Name); // находим пользователя для изменений
-                editpare.Count -= 1; // вносим изменения
-
-                Core.Context.SaveChanges();
-
-            }
-            if (temp_choice != temp_break)
-            {
-                Console.WriteLine("Ты непраивльно выбрал деталь для замены...");
-                Balance = Balance - ((details.First(u => u.Name == NameDetails[temp_choice]).Price / 100) * 20);
-                Details editpare = Core.Context.Details.ToList().Last(u => u.Name == details[temp_choice].Name); // находим пользователя для изменений
-                editpare.Count -= 1; // вносим изменения
-
-                Core.Context.SaveChanges();
-            }
-            if (Balance <= 0)
-            {
-                Console.WriteLine("Увы ты проиграл...");
-                foreach (var pare in Core.Context.Details.ToList())
-                {
-                    Core.Context.Details.Remove(pare);
-                }
-                Core.Context.SaveChanges();
-
-            }
-            Console.WriteLine("если ты хочешь купить какую то деталь напиши y/n");
-            string temp_choice_buy = Console.ReadLine();
-            if (temp_choice_buy == "y")
-            {
-                buy();
-            }
-
-
-
-
-            Console.WriteLine("----------------------------------------------------------");
-
-        }
-        public static void buy()
-        {
-            Console.WriteLine("какую запчасть вы хотите купить?\n" +
-                "0 - Трансмиссия\n" +
-                "1 - Двигатель\n" +
-                "2 - Коробка передач\n" +
-                "3-привод\n" +
-                "4-печка");
-            int temp_buy = Convert.ToInt32(Console.ReadLine());
-            Details editpare = Core.Context.Details.ToList().Last(u => u.Name == details[temp_buy].Name); // находим пользователя для изменений
-            editpare.Count += 1; //вносим изменения
-            Balance = Balance - (details.First(u => u.Name == NameDetails[temp_buy]).Price);
-            Core.Context.SaveChanges();
-
-        }
-        public static void game_while()
-        {
-            while (true)
-            {
-                Console.WriteLine("ВЫберете следущий ход 1 или очистить базу 2");
-                int temp_game = Convert.ToInt32(Console.ReadLine());
-                switch (temp_game)
-                {
-                    case 1:
-                        game();
-                        break;
-                    case 2:
-                        foreach (var pare in Core.Context.Details.ToList())
+                    case "1":
+                        if (brokenPart.Count > 0)
                         {
-                            Core.Context.Details.Remove(pare);
+                            Details editPart = Core.Context.Details.First(u => u.Name.Contains(brokenPart.Name));
+                            editPart.Count--;
+                            Core.Context.SaveChanges();
+
+                            balance += repairPayment;
+                            Console.WriteLine($"Вы успешно починили {brokenPart.Name}!");
+                            Console.WriteLine($"Получено: {repairPayment} руб.");
                         }
-                        Core.Context.SaveChanges();
+                        else
+                        {
+
+                            balance -= 100m;
+                            Console.WriteLine("У вас нет нужной детали! Штраф 100 руб.");
+                            Console.WriteLine("Клиент уехал недовольный!");
+                        }
                         break;
 
+                    case "2":
+                        balance -= 50m;
+                        Console.WriteLine("Вы отказались от ремонта. Штраф 50 руб.");
+                        Console.WriteLine("Клиент уехал искать другую мастерскую.");
+                        break;
+                    case "3":
+                        Console.WriteLine("\n МАГАЗИН ДЕТАЛЕЙ:");
+                        Console.WriteLine("Доступные детали:");
 
+                        int index = 1;
+                        foreach (var part in parts)
+                        {
+                            Console.WriteLine($"{index} - {part.Name}: {part.Price} руб. (на складе: {part.Count})");
+                            index++;
+                        }
+
+                        Console.Write("Выберите номер детали для покупки: ");
+                        if (int.TryParse(Console.ReadLine(), out int partChoice) && partChoice >= 1 && partChoice <= parts.Count)
+                        {
+                            Details selectedPart = parts[partChoice - 1];
+                            Console.Write($"Сколько '{selectedPart.Name}' хотите купить? ");
+
+                            if (int.TryParse(Console.ReadLine(), out int count) && count > 0)
+                            {
+                                decimal totalCost = selectedPart.Price * count;
+
+                                if (balance >= totalCost)
+                                {
+                                    balance -= totalCost;
+                                    Details editPart = Core.Context.Details.First(u => u.Name.Contains(selectedPart.Name));
+                                    editPart.Count += count;
+                                    Core.Context.SaveChanges();
+                                    Console.WriteLine($" Куплено {count} шт. '{selectedPart.Name}' за {totalCost} руб.");
+                                }
+                                else
+                                {
+                                    Console.WriteLine(" Недостаточно денег для покупки!");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine(" Неверное количество!");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine(" Неверный выбор детали!");
+                        }
+                        goto Label;
+
+                    case "4":
+                        Console.WriteLine("\n СКЛАД ДЕТАЛЕЙ:");
+                        foreach (var part in parts)
+                        {
+                            Console.WriteLine($"- {part.Name}: {part.Count} шт. (цена: {part.Price} руб.)");
+                        }
+                        Console.WriteLine($" Баланс: {balance} руб.");
+                        goto Label;
+
+                    case "0":
+                        gameOver = true;
+                        Console.WriteLine("Спасибо за игру!");
+                        break;
+
+                    default:
+                        Console.WriteLine(" Неверный выбор! Попробуйте снова.");
+                        break;
+                }
+
+
+                if (balance <= 0)
+                {
+                    gameOver = true;
+                    Console.WriteLine("\n ИГРА ОКОНЧЕНА!");
+                    Console.WriteLine("У вас закончились деньги!");
+                    Console.WriteLine("Вы банкрот!");
+                }
+
+
+                if (!gameOver)
+                {
+                    Console.WriteLine("\nНажмите любую клавишу для продолжения...");
+                    Console.ReadKey();
                 }
             }
-        }
-        static void Main(string[] args)
-        {
-            Create();
-            game_while();
+
+            Console.WriteLine($"\nИтоговый баланс: {balance} руб.");
+            Console.WriteLine("Нажмите любую клавишу для выхода...");
+            Console.ReadKey();
         }
     }
 }
