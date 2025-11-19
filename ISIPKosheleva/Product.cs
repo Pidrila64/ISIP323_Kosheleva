@@ -18,6 +18,7 @@ namespace ISIPKosheleva
         public Product()
         {
             this.Basket = new HashSet<Basket>();
+            this.Basket1 = new HashSet<Basket>();
             this.OrderProduct = new HashSet<OrderProduct>();
         }
     
@@ -29,6 +30,8 @@ namespace ISIPKosheleva
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Basket> Basket { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Basket> Basket1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderProduct> OrderProduct { get; set; }
     }

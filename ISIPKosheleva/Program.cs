@@ -203,7 +203,7 @@ namespace ISIPKosheleva
             }
 
             Basket existingBasket = Core.Context.Basket
-                .FirstOrDefault(b =>  b.Uset_ID == user.ID && b.Product_ID == product.ID);
+                .FirstOrDefault(b =>  b.User_ID == user.ID && b.Product_ID == product.ID);
 
             if(existingBasket != null)
             {
@@ -214,7 +214,7 @@ namespace ISIPKosheleva
             {
                 Basket newBasket = new Basket
                 {
-                    Uset_ID = user.ID,
+                    User_ID = user.ID,
                     Product_ID = product.ID,
                     Count = quantity
                 };
@@ -227,7 +227,7 @@ namespace ISIPKosheleva
         {
             List<Basket> baskets = Core.Context.Basket
                 .Include(b => b.Product)
-                .Where(b => b.Uset_ID == user.ID)
+                .Where(b => b.User_ID == user.ID)
                 .ToList();
 
             Console.WriteLine("Ваша корзина");
@@ -255,7 +255,30 @@ namespace ISIPKosheleva
         }
         static void BueBasket(User user)
         {
+            Console.WriteLine("Оформление заказа ");
+            LookBasket (user);
+            while (true)
+            {
+                Console.WriteLine("1. купить ВСЮ порзину");
+                Console.WriteLine("2. купить АДИН товар из порзины");
+                Console.WriteLine("3. Вернутся назад");
+                int chice = Convert.ToInt32(Console.ReadLine());
 
+                switch (chice)
+                {
+                    case 1:
+                        BuyWholeBasket(user);
+                        break;
+                    case 2:
+                        BuySingleProduct(user);
+                        break;
+                    case 3:
+                        return;
+                    default:
+                        Console.WriteLine("Неверный пункт меню!");
+                        break;
+                }
+            }
         }
         static void HistotyOrders(User user)
         {

@@ -1,4 +1,4 @@
-﻿// Создание кода T4 для модели "C:\Users\m1503\OneDrive\Desktop\3ISIP323_Kosheleva\ISIPKosheleva\Model.edmx" включено. 
+﻿// Создание кода T4 для модели "C:\Users\m1503\OneDrive\Desktop\3ISIP323_Kosheleva\ISIPKosheleva\Model1.edmx" включено. 
 // Чтобы включить формирование кода прежних версий, измените значение свойства "Стратегия создания кода" конструктора
 // на "Legacy ObjectContext". Это свойство доступно в окне "Свойства", если модель
 // открыта в конструкторе.

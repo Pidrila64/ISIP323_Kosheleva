@@ -13,10 +13,10 @@ namespace ISIPKosheleva
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class GMWOGEntities : DbContext
+    public partial class GMWOGEntities2 : DbContext
     {
-        public GMWOGEntities()
-            : base("name=GMWOGEntities")
+        public GMWOGEntities2()
+            : base("name=GMWOGEntities2")
         {
         }
     

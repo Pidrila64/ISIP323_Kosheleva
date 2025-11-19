@@ -15,11 +15,13 @@ namespace ISIPKosheleva
     public partial class Basket
     {
         public int ID { get; set; }
-        public int Uset_ID { get; set; }
+        public int User_ID { get; set; }
         public int Product_ID { get; set; }
         public int Count { get; set; }
     
         public virtual Product Product { get; set; }
+        public virtual Product Product1 { get; set; }
         public virtual User User { get; set; }
+        public virtual User User1 { get; set; }
     }
 }

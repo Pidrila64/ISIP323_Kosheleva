@@ -8,6 +8,6 @@ namespace ISIPKosheleva
 {
     internal class Core
     {
-        public static GMWOGEntities Context = new GMWOGEntities();
+        public static GMWOGEntities2 Context = new GMWOGEntities2();
     }
 }
