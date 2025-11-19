@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using System.Runtime.CompilerServices;
 
 
 namespace ISIPKosheleva
@@ -11,6 +12,24 @@ namespace ISIPKosheleva
 
     internal class Program
     {
+        static int UserChoice(int minChoice, int maxChoice)
+        {
+            while (true)
+            {
+                int choiceNumber;
+                if (!int.TryParse(Console.ReadLine(), out choiceNumber))
+                {
+                    continue;
+                }
+
+                if (choiceNumber < minChoice || choiceNumber > maxChoice)
+                {
+                    continue;
+                }
+                return choiceNumber;
+            }
+        }
+
 
         static void Main(string[] args)
         {
@@ -21,7 +40,7 @@ namespace ISIPKosheleva
                 Console.WriteLine("3. Вход в аккаунт");
                 Console.WriteLine("4. Вывод всех пвз");
 
-                int chois = Convert.ToInt32(Console.ReadLine());
+                int chois = UserChoice(1, 4);
 
                 switch (chois)
                 {
@@ -48,10 +67,16 @@ namespace ISIPKosheleva
         static void OutputAllProduct()
         {
             List<Product> products = Core.Context.Product.ToList();
-            foreach (Product product in products) 
+
+            Console.WriteLine("Наши товары");
+
+            foreach (Product product in products)
             {
-                Console.WriteLine($"{product.ID},{product.Count},{product.Price},{product.OrderProduct},{product.NameProduct}");
+                Console.WriteLine($"{product.ID}, {product.NameProduct}, {product.Dsscription}, {product.Price}, {product.Count}");
             }
+
+            Console.WriteLine("------------------------------------------");
+
 
         }
 
@@ -116,7 +141,7 @@ namespace ISIPKosheleva
             Console.WriteLine("Введите пароль");
             string password = Console.ReadLine();
 
-            if (!string.IsNullOrWhiteSpace(login) || !string.IsNullOrWhiteSpace(password))
+            if (login == " " || password == " ")
             {
                 Console.WriteLine("Значение не должно быть пустым");
                 return;
@@ -166,7 +191,12 @@ namespace ISIPKosheleva
                 Console.WriteLine("5. История заказов");
                 Console.WriteLine("6. Выйти из акка");
 
-                int chois = Convert.ToInt32(Console.ReadLine());
+                int chois;
+                if (!int.TryParse(Console.ReadLine(), out chois))
+                {
+                    Console.WriteLine("ТЫ ДОЛАБЁЁЁЁБ!");
+                    break;
+                }
 
                 switch( chois)
                 {
@@ -413,7 +443,7 @@ namespace ISIPKosheleva
 
             Basket selectedBasket = baskets[itemNumber - 1];
 
-            OutputAllProduct();
+            OutputAllPVZ();
 
             Console.Write("Выберите ID ПВЗ для получения заказа: ");
             int pvzId = Convert.ToInt32(Console.ReadLine());
