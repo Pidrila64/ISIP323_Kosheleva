@@ -178,8 +178,62 @@ namespace ISIPKosheleva
 
         static void AddProduct(User user)
         {
+            OutputAllProduct();
+            Console.WriteLine("Введите ID товара для добавления");
+            int productID = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Введите кол-во:");
+            int quantity = Convert.ToInt32(Console.ReadLine());
+
+            Product product = Core.Context.Product.FirstOrDefault(p => p.ID == productID);
+            if(product == null)
+            {
+                Console.WriteLine("Товар с таким ID не найден");
+                return ;
+            }
+            if( quantity > product.Count)
+            {
+                Console.WriteLine("Недостаточно товаров на складе");
+                return;
+            }
+            if (quantity <= 0)
+            {
+                Console.WriteLine("Товара должно быть >0");
+                return ;
+            }
+
+            Basket existingBasket = Core.Context.Basket
+                .FirstOrDefault(b =>  b.Uset_ID == user.ID && b.Product_ID == product.ID);
+
+            if(existingBasket != null)
+            {
+                existingBasket.Count += quantity;
+                Console.WriteLine("Добавили в уже существующий");
+            }
+            else
+            {
+                Basket newBasket = new Basket
+                {
+                    Uset_ID = user.ID,
+                    Product_ID = product.ID,
+                    Count = quantity
+                };
+                Core.Context.Basket.Add(newBasket);
+                Console.WriteLine("Мы добавили товар");
+            }
+            Core.Context.SaveChanges();
+        }
+        static void LookBasket(User user)
+        {
 
         }
-        
+        static void BueBasket(User user)
+        {
+
+        }
+        static void HistotyOrders(User user)
+        {
+
+        }
     }
 }
