@@ -133,6 +133,53 @@ namespace ISIPKosheleva
 
             UserMenu(user);
         }
-        static void UserMenu
+        static void UserMenu(User user)
+        {
+            Console.WriteLine($"Личный кабинет{user.Name}");
+            while(true)
+            {
+                Console.WriteLine("1. Посмотреть товары");
+                Console.WriteLine("2. Добавить товар");
+                Console.WriteLine("3. Посмотреть свою корзину");
+                Console.WriteLine("4. Заказать товар из корзины");
+                Console.WriteLine("5. История заказов");
+                Console.WriteLine("6. Выйти из акка");
+
+                int chois = Convert.ToInt32(Console.ReadLine());
+
+                switch( chois)
+                {
+                    case 1:
+                        OutputAllProduct();
+                        break;
+                    case 2:
+                        AddProduct(user);
+                        break;
+                    case 3:
+                        LookBasket(user);
+                        break;
+                    case 4:
+                        BueBasket(user);
+                        break;
+                    case 5:
+                        HistotyOrders(user);
+                        break;
+                    case 6:
+                        Console.WriteLine("Выйти из акка");
+                        return;
+                    default:
+                        Console.WriteLine("Нет такого попробуй снова");
+                        break;
+
+                }
+
+            }
+        }
+
+        static void AddProduct(User user)
+        {
+
+        }
+        
     }
 }
