@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
+
 
 namespace ISIPKosheleva
 {
@@ -282,7 +284,38 @@ namespace ISIPKosheleva
         }
         static void HistotyOrders(User user)
         {
+            Console.WriteLine("История заказов");
 
+            List<Order> orders = Core.Context.Order
+                .Include(o => o.PVZ)
+                .Include(o => o.OrderProduct)
+                .Where(o => o.User_ID == user.ID)
+                .OrderByDescending(o => o.Date)
+                .ToList();
+
+            if (!orders.Any())
+            {
+                Console.WriteLine("У вас нет заказов");
+                return;
+            }
+            foreach (Order order in orders)
+            {
+                Console.WriteLine($"Заказ {order.ID} от {order.Date:dd.MM.yyyy}");
+                Console.WriteLine($"ПВЗ: {order.PVZ.NamePVZ}");
+                Console.WriteLine($"Сумма: {order.TotalPrice} руб.");
+                Console.WriteLine("Товары:");
+
+                var orderProducts = Core.Context.OrderProduct
+                    .Include(op => op.Product)
+                    .Where(op => op.Order_ID == order.ID)
+                    .ToList();
+
+                foreach(var orderProduct in orderProducts)
+                {
+                    Console.WriteLine($"{orderProduct.Product.NameProduct}* {orderProduct.Count}");
+                }
+                Console.WriteLine("---------------------------------------------------");
+            }
         }
     }
 }
