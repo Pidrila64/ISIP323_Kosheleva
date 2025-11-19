@@ -18,6 +18,8 @@
         <AssociationConnector Association="GMWOGModel.FK_Order_User" ManuallyRouted="false" />
         <AssociationConnector Association="GMWOGModel.FK_OrderProduct_Order" ManuallyRouted="false" />
         <AssociationConnector Association="GMWOGModel.FK_OrderProduct_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="GMWOGModel.FK_Basket_User1" />
+        <AssociationConnector Association="GMWOGModel.FK_Basket_User11" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

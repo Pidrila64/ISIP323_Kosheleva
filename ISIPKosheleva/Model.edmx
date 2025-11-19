@@ -4,13 +4,13 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище GMWOGModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище GMWOGModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Basket">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Uset_ID" Type="int" Nullable="false" />
+          <Property Name="User_ID" Type="int" Nullable="false" />
           <Property Name="Product_ID" Type="int" Nullable="false" />
           <Property Name="Count" Type="int" Nullable="false" />
         </EntityType>
@@ -92,7 +92,19 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Basket">
-              <PropertyRef Name="Uset_ID" />
+              <PropertyRef Name="User_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Basket_User1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Basket" Type="Self.Basket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Basket">
+              <PropertyRef Name="User_ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -160,6 +172,10 @@
             <End Role="User" EntitySet="User" />
             <End Role="Basket" EntitySet="Basket" />
           </AssociationSet>
+          <AssociationSet Name="FK_Basket_User1" Association="Self.FK_Basket_User1">
+            <End Role="User" EntitySet="User" />
+            <End Role="Basket" EntitySet="Basket" />
+          </AssociationSet>
           <AssociationSet Name="FK_Order_PVZ" Association="Self.FK_Order_PVZ">
             <End Role="PVZ" EntitySet="PVZ" />
             <End Role="Order" EntitySet="Order" />
@@ -177,8 +193,7 @@
             <End Role="OrderProduct" EntitySet="OrderProduct" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="GMWOGModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -192,6 +207,9 @@
           <Property Name="Count" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Product" Relationship="Self.FK_Basket_Product" FromRole="Basket" ToRole="Product" />
           <NavigationProperty Name="User" Relationship="Self.FK_Basket_User" FromRole="Basket" ToRole="User" />
+          <Property Name="User_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="User1" Relationship="GMWOGModel.FK_Basket_User1" FromRole="Basket" ToRole="User" />
+          <NavigationProperty Name="User11" Relationship="GMWOGModel.FK_Basket_User11" FromRole="Basket" ToRole="User" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -260,6 +278,8 @@
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Basket" Relationship="Self.FK_Basket_User" FromRole="User" ToRole="Basket" />
           <NavigationProperty Name="Order" Relationship="Self.FK_Order_User" FromRole="User" ToRole="Order" />
+          <NavigationProperty Name="Basket1" Relationship="GMWOGModel.FK_Basket_User1" FromRole="User" ToRole="Basket" />
+          <NavigationProperty Name="Basket11" Relationship="GMWOGModel.FK_Basket_User11" FromRole="User" ToRole="Basket" />
         </EntityType>
         <Association Name="FK_Basket_Product">
           <End Role="Product" Type="Self.Product" Multiplicity="1" />
@@ -365,7 +385,39 @@
             <End Role="Product" EntitySet="Product" />
             <End Role="OrderProduct" EntitySet="OrderProduct" />
           </AssociationSet>
+          <AssociationSet Name="FK_Basket_User1" Association="GMWOGModel.FK_Basket_User1">
+            <End Role="User" EntitySet="User" />
+            <End Role="Basket" EntitySet="Basket" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Basket_User11" Association="GMWOGModel.FK_Basket_User11">
+            <End Role="User" EntitySet="User" />
+            <End Role="Basket" EntitySet="Basket" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_Basket_User1">
+          <End Type="GMWOGModel.User" Role="User" Multiplicity="1" />
+          <End Type="GMWOGModel.Basket" Role="Basket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Basket">
+              <PropertyRef Name="User_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Basket_User11">
+          <End Type="GMWOGModel.User" Role="User" Multiplicity="1" />
+          <End Type="GMWOGModel.Basket" Role="Basket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Basket">
+              <PropertyRef Name="User_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -375,8 +427,8 @@
           <EntitySetMapping Name="Basket">
             <EntityTypeMapping TypeName="GMWOGModel.Basket">
               <MappingFragment StoreEntitySet="Basket">
+                <ScalarProperty Name="User_ID" ColumnName="User_ID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Uset_ID" ColumnName="Uset_ID" />
                 <ScalarProperty Name="Product_ID" ColumnName="Product_ID" />
                 <ScalarProperty Name="Count" ColumnName="Count" />
               </MappingFragment>

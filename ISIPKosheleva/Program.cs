@@ -225,6 +225,32 @@ namespace ISIPKosheleva
         }
         static void LookBasket(User user)
         {
+            List<Basket> baskets = Core.Context.Basket
+                .Include(b => b.Product)
+                .Where(b => b.Uset_ID == user.ID)
+                .ToList();
+
+            Console.WriteLine("Ваша корзина");
+            if (!baskets.Any())
+            {
+                Console.WriteLine("Корзина пуста");
+                return;
+            }
+
+            decimal  totalPrice = 0;
+            foreach(Basket basket in baskets)
+            {
+                Console.WriteLine($"{basket.Product.NameProduct}");
+                Console.WriteLine($"Описание:{basket.Product.Dsscription}");
+                Console.WriteLine($"Цена:{basket.Product.Price}");
+                Console.WriteLine($"Кол-во:{basket.Count}");
+                Console.WriteLine($"Суммa:{basket.Product.Price * basket.Count}");
+
+                totalPrice += basket.Product.Price * basket.Count;
+            }
+            Console.WriteLine($"Общая сумма:{totalPrice}");
+            Console.WriteLine("--------------------------------------------------------------------");
+
 
         }
         static void BueBasket(User user)
