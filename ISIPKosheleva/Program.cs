@@ -259,7 +259,9 @@ namespace ISIPKosheleva
             }
 
             decimal  totalPrice = 0;
-            foreach(Basket basket in baskets)
+            int itemNumber = 1;
+
+            foreach (Basket basket in baskets)
             {
                 Console.WriteLine($"{basket.Product.NameProduct}");
                 Console.WriteLine($"Описание:{basket.Product.Dsscription}");
@@ -268,6 +270,7 @@ namespace ISIPKosheleva
                 Console.WriteLine($"Суммa:{basket.Product.Price * basket.Count}");
 
                 totalPrice += basket.Product.Price * basket.Count;
+                itemNumber++;
             }
             Console.WriteLine($"Общая сумма:{totalPrice}");
             Console.WriteLine("--------------------------------------------------------------------");
@@ -394,6 +397,63 @@ namespace ISIPKosheleva
 
         static void BuySingleProduct(User user)
         {
+            Console.Write("Введите номер товара из корзины для покупки: ");
+            int itemNumber = Convert.ToInt32(Console.ReadLine());
+
+            List<Basket> baskets = Core.Context.Basket
+                .Include(b => b.Product)
+                .Where(b => b.User_ID == user.ID)
+                .ToList();
+
+            if (itemNumber < 1 || itemNumber > baskets.Count)
+            {
+                Console.WriteLine("неверный номер товара");
+                return;
+            }
+
+            Basket selectedBasket = baskets[itemNumber - 1];
+
+            OutputAllProduct();
+
+            Console.Write("Выберите ID ПВЗ для получения заказа: ");
+            int pvzId = Convert.ToInt32(Console.ReadLine());
+
+            PVZ selectedPVZ = Core.Context.PVZ.FirstOrDefault(p => p.ID == pvzId);
+            if (selectedPVZ == null)
+            {
+                Console.WriteLine("ПВЗ с таким ID не найден!");
+                return;
+            }
+
+            Order newOrder = new Order
+            {
+                User_ID = user.ID,
+                PVZ_ID = pvzId,
+                Date = DateTime.Now,
+                Status = "Оформлен",
+                TotalPrice = selectedBasket.Product.Price * selectedBasket.Count
+            };
+
+            Core.Context.Order.Add(newOrder);
+            Core.Context.SaveChanges();
+
+            OrderProduct orderProduct = new OrderProduct
+            {
+                Order_ID = newOrder.ID,
+                Product_ID = selectedBasket.Product_ID,
+                Count = selectedBasket.Count,
+            };
+
+            Core.Context.OrderProduct.Add(orderProduct);
+
+            selectedBasket.Product.Count -= selectedBasket.Count;
+
+            Core.Context.SaveChanges();
+
+            Console.WriteLine($"Заказ №{newOrder.ID} успешно оформлен!");
+            Console.WriteLine($"Сумма: {newOrder.TotalPrice} руб.");
+            Console.WriteLine($"ПВЗ: {selectedPVZ.NamePVZ}");
+            Console.WriteLine("----------------------------------------");
 
         }
     }
