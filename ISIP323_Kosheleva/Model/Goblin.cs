@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace ISIP323_Kosheleva.Model
 {
-    internal class Slime : Enemy
+    internal class Goblin : Enemy
     {
-        public Slime() : base(15, 10, 2,2)
+        public Goblin() : base(30, 10, 2, 0)
         {
-            Name = "Слайм";
+            Name = "Гоблин";
+            HasCrit = true;
+            CritChance = 20;
         }
+
     }
 }

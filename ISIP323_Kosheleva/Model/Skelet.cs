@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace ISIP323_Kosheleva.Model
 {
-    internal class Slime : Enemy
+    internal class Skelet : Enemy
     {
-        public Slime() : base(15, 10, 2,2)
+        public Skelet() : base(40, 15, 3, 0)
         {
-            Name = "Слайм";
+            Name = "Скелет";
+            IgnoreDefense = true;
         }
     }
 }
