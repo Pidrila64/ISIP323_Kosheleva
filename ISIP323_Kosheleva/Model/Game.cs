@@ -10,31 +10,7 @@ namespace ISIP323_Kosheleva.Model
     {
         static Random rnd = new Random();
 
-        public static Enemy GenerateRandomEnemy(bool isBoss = false)
-        {
-            if (isBoss)
-            {
-                int roll = rnd.Next(4);
-                switch (roll)
-                {
-                    case 0: return new GoblinBoss();
-                    case 1: return new SkeletBossKova();
-                    case 2: return new SkeletBossPest();
-                    case 3: return new MagBoss();
-                }
-            }
-            else
-            {
-                int roll = rnd.Next(3);
-                switch (roll)
-                {
-                    case 0: return new Goblin();
-                    case 1: return new Skelet();
-                    case 2: return new Mag();
-                }
-            }
-            return null;
-        }
+        
 
         public static void OpenChest(Player player)
         {
@@ -117,7 +93,10 @@ namespace ISIP323_Kosheleva.Model
                 }
                 else
                 {
-                    Enemy enemy = GenerateRandomEnemy(isBossTurn);
+                    Enemy enemy;
+                    if (isBossTurn) { enemy = EnemyFactory.CreateBossEnemy(); }
+                    else {enemy = EnemyFactory.CreateEnemy();}
+                                                                        
                     Battle(player, enemy);
                     if (!player.IsAlive()) break;
                 }

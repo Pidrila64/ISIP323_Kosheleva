@@ -10,7 +10,7 @@ namespace ISIP323_Kosheleva.Model
     {
         public Slime() : base(15, 10, 2,2)
         {
-            Name = "Слайм";
+            Name = "Слизень(слайм)";
         }
     }
 }
